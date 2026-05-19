@@ -1,0 +1,98 @@
+/* ═══════════════════════════════════════════════════════════
+   FPS FACTORY — Design Tokens
+   Single source of truth para todos los valores del sistema.
+══════════════════════════════════════════════════════════ */
+:root {
+  /* ── Backgrounds ────────────────────────────────────── */
+  --bg-deep:     #05080f;
+  --bg-base:     #090d17;
+  --bg-surface:  #0f1623;
+  --bg-elevated: #16202f;
+  --bg-card:     #111825;
+  --bg-input:    #0d1420;
+
+  /* ── Borders ────────────────────────────────────────── */
+  --border-subtle:  rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.10);
+  --border-strong:  rgba(0, 210, 255, 0.25);
+
+  /* ── Brand palette ──────────────────────────────────── */
+  --cyan:        #00d2ff;
+  --cyan-glow:   rgba(0, 210, 255, 0.18);
+  --cyan-dim:    #009ec2;
+  --orange:      #ff6a00;
+  --orange-glow: rgba(255, 106, 0, 0.18);
+  --orange-dim:  #cc5500;
+  --danger:      #ff3d57;
+  --success:     #22c55e;
+  --success-glow:rgba(34, 197, 94, 0.4);
+
+  /* ── Text ───────────────────────────────────────────── */
+  --text-primary:   #ddeeff;
+  --text-secondary: #6a8aaa;
+  --text-muted:     #344a60;
+
+  /* ── Gradients ──────────────────────────────────────── */
+  --grad-cyan:   linear-gradient(135deg, #00d2ff, #006aff);
+  --grad-orange: linear-gradient(135deg, #ff6a00, #ff3d00);
+  --grad-card:   linear-gradient(160deg, #111825 0%, #0c121e 100%);
+  --grad-hero:   linear-gradient(120deg, #05080f 0%, #0a1428 55%, #08101e 100%);
+
+  /* ── Typography ─────────────────────────────────────── */
+  --font-logo: 'Orbitron', 'Arial Black', sans-serif;
+  --font-head: 'Rajdhani', 'Arial', sans-serif;
+  --font-body: 'Nunito Sans', 'Segoe UI', sans-serif;
+
+  --text-xs:   0.72rem;
+  --text-sm:   0.85rem;
+  --text-base: 1rem;
+  --text-lg:   1.15rem;
+  --text-xl:   1.4rem;
+  --text-2xl:  1.8rem;
+  --text-3xl:  2.4rem;
+
+  /* ── Spacing ────────────────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ── Radii ──────────────────────────────────────────── */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  /* ── Shadows ────────────────────────────────────────── */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
+  --shadow-elevated: 0 16px 50px rgba(0, 0, 0, 0.4);
+  --shadow-cyan: 0 0 0 3px var(--cyan-glow);
+
+  /* ── Transitions ────────────────────────────────────── */
+  --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in:   cubic-bezier(0.64, 0, 0.78, 0);
+  --duration-fast:   150ms;
+  --duration-normal: 250ms;
+  --duration-slow:   400ms;
+
+  /* ── Layout ─────────────────────────────────────────── */
+  --navbar-h:      68px;
+  --sidebar-w:     240px;
+  --max-width:     1400px;
+  --padding-page:  clamp(var(--space-4), 4vw, var(--space-12));
+
+  /* ── Z-index scale ──────────────────────────────────── */
+  --z-base:    1;
+  --z-sticky:  100;
+  --z-navbar:  1000;
+  --z-drawer:  2000;
+  --z-modal:   3000;
+  --z-toast:   9000;
+  --z-loading: 9999;
+}

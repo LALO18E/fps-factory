@@ -1,0 +1,301 @@
+/* ═══════════════════════════════════════════════════════════
+   FPS FACTORY — Browser Fallbacks
+   Soporte para navegadores que no tienen features modernas.
+   Este archivo se carga DESPUÉS de todos los demás CSS para
+   que los fallbacks sobreescriban cuando sea necesario.
+══════════════════════════════════════════════════════════ */
+
+/* ─── CSS Custom Properties ──────────────────────────────
+   Si el browser no soporta variables CSS, usamos valores
+   hardcodeados como fallback.
+   Nota: @supports (color: var(--x)) es true en todos los
+   browsers que soportan custom properties, así que usamos
+   la negación para apuntar a los que NO lo soportan.
+────────────────────────────────────────────────────────── */
+@supports not (color: var(--bg-base)) {
+  body {
+    background-color: #090d17;
+    color: #ddeeff;
+    font-family: 'Nunito Sans', 'Segoe UI', sans-serif;
+  }
+
+  #navbar {
+    background: rgba(9, 13, 23, 0.97);
+    height: 68px;
+  }
+
+  #hero {
+    background: #05080f;
+  }
+
+  .product-card {
+    background: #111825;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+  }
+
+  .card-price {
+    color: #00d2ff;
+    font-size: 1.1rem;
+  }
+}
+
+
+/* ─── backdrop-filter ────────────────────────────────────
+   Safari < 9, Firefox < 103 (sin flag) no tienen
+   backdrop-filter. En su lugar usamos un fondo sólido.
+────────────────────────────────────────────────────────── */
+@supports not (backdrop-filter: blur(1px)) {
+  #navbar {
+    background: rgba(9, 13, 23, 0.97) !important;
+  }
+
+  .modal-overlay {
+    background: rgba(0, 0, 0, 0.88) !important;
+  }
+
+  #cart-overlay {
+    background: rgba(0, 0, 0, 0.82) !important;
+  }
+
+  .modal-box {
+    border: 1px solid rgba(0, 210, 255, 0.2);
+  }
+}
+
+
+/* ─── CSS Grid ───────────────────────────────────────────
+   IE 11 tiene soporte parcial de Grid (spec antigua).
+   Usamos flexbox como fallback universal.
+────────────────────────────────────────────────────────── */
+@supports not (display: grid) {
+  /* Main layout */
+  #main-layout {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    gap: 28px;
+  }
+
+  #filters-sidebar {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 240px;
+    flex: 0 0 240px;
+  }
+
+  #catalog-area {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 0;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  /* Product grid */
+  #products-grid {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .product-card {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(25% - 12px);
+    flex: 0 0 calc(25% - 12px);
+  }
+
+  /* Hero grid */
+  #hero {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .hero-content {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+  }
+
+  .hero-featured {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 380px;
+    flex: 0 0 380px;
+  }
+
+  /* Modal grid */
+  .modal-detail-grid {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+
+  .modal-img-panel,
+  .modal-info-panel {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+  }
+
+  /* Specs */
+  .specs-grid {
+    display: block;
+  }
+
+  .spec-key,
+  .spec-val {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+  }
+}
+
+
+/* ─── clamp() ────────────────────────────────────────────
+   Browsers que no soportan clamp() (IE, Edge <79).
+   Usamos valores fijos como fallback.
+────────────────────────────────────────────────────────── */
+@supports not (font-size: clamp(1rem, 2vw, 2rem)) {
+  .hero-title {
+    font-size: 2.4rem;
+  }
+
+  .loader-logo {
+    font-size: 2.4rem;
+  }
+
+  #hero {
+    padding: 60px 48px;
+  }
+
+  #main-layout {
+    padding: 32px 48px 80px;
+  }
+
+  #navbar {
+    padding: 0 48px;
+  }
+}
+
+
+/* ─── CSS Animations / @keyframes ───────────────────────
+   Browsers muy viejos no soportan animaciones.
+   Eliminamos las animaciones que podrían bloquear el render.
+────────────────────────────────────────────────────────── */
+@supports not (animation-name: test) {
+  .loader-bar-fill {
+    width: 100%;
+  }
+
+  .product-card {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+
+  .hero-tag-dot {
+    opacity: 1;
+  }
+
+  #loading-screen {
+    display: none; /* Sin animaciones, ocultamos el loader directamente */
+  }
+}
+
+
+/* ─── object-fit ─────────────────────────────────────────
+   IE 11 no soporta object-fit.
+   Usamos background-image como alternativa visual.
+────────────────────────────────────────────────────────── */
+@supports not (object-fit: contain) {
+  .card-img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 140px;
+    margin: 0 auto;
+  }
+
+  .modal-product-img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .hero-featured-img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+
+/* ─── CSS Gap (para Flexbox) ─────────────────────────────
+   Algunos browsers soportan Grid gap pero no flex gap.
+   Safari < 14.1, Chrome < 84.
+────────────────────────────────────────────────────────── */
+@supports not (gap: 1px) {
+  .nav-actions > * + * {
+    margin-left: 8px;
+  }
+
+  .hero-cta > * + * {
+    margin-left: 12px;
+  }
+
+  .hero-stats > * + * {
+    margin-left: 28px;
+  }
+
+  .cart-item-controls > * + * {
+    margin-left: 8px;
+  }
+}
+
+
+/* ─── position: sticky ───────────────────────────────────
+   IE 11 no soporta sticky. Fallback a relative.
+────────────────────────────────────────────────────────── */
+@supports not (position: sticky) {
+  #navbar {
+    position: relative;
+  }
+
+  #filters-sidebar {
+    position: relative;
+    top: auto;
+  }
+}
+
+
+/* ─── Alerta de browser obsoleto ────────────────────────
+   El elemento #browser-warning es inyectado por support.js
+   si detecta un browser muy viejo.
+────────────────────────────────────────────────────────── */
+#browser-warning {
+  display: none;
+  background: #ff6a00;
+  color: white;
+  text-align: center;
+  padding: 10px 20px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  position: relative;
+  z-index: 9998;
+}
+
+#browser-warning a {
+  color: white;
+  text-decoration: underline;
+}
+
+#browser-warning.visible {
+  display: block;
+}

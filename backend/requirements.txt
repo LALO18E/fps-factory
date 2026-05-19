@@ -1,0 +1,25 @@
+# ─── FPS Factory — Backend Dependencies ───────────────────
+# Instalar con: pip install -r requirements.txt
+
+# Framework
+Flask==3.0.3
+flask-cors==4.0.1
+
+# Base de datos MySQL
+mysql-connector-python==8.4.0
+
+# Seguridad
+bcrypt==4.1.3
+PyJWT==2.8.0
+
+# Validación
+marshmallow==3.21.3
+
+# Variables de entorno
+python-dotenv==1.0.1
+
+# Pagos
+stripe==9.12.0
+
+# Utilidades
+python-dateutil==2.9.0

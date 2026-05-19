@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FPS Factory — Finaliza tu compra de forma segura." />
+  <meta name="theme-color" content="#090d17" />
+  <title>FPS Factory — Checkout</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Design system base -->
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <!-- Estilos específicos del checkout -->
+  <link rel="stylesheet" href="css/checkout.css" />
+  <!-- Fallbacks de browser -->
+  <link rel="stylesheet" href="css/fallbacks.css" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- Stripe.js (carga sin bloquear) -->
+  <script src="https://js.stripe.com/v3/" defer></script>
+  <!-- Polyfills -->
+  <script src="js/support.js"></script>
+</head>
+<body>
+
+  <a class="skip-link" href="#checkout-layout">Saltar al formulario de compra</a>
+  <div id="browser-warning" role="alert" aria-live="assertive">
+    ⚠️ Tu navegador está desactualizado.
+    <a href="https://browsehappy.com/" target="_blank" rel="noopener">Actualízalo aquí</a>.
+  </div>
+
+
+  <!-- ═══════════ NAVBAR ══════════════════════════════ -->
+  <header id="navbar" role="banner">
+    <a href="index.html" class="nav-logo" aria-label="FPS Factory — Volver al catálogo">
+      <span class="nav-logo-fps"     aria-hidden="true">FPS</span>
+      <span class="nav-logo-factory" aria-hidden="true">FACTORY</span>
+      <span class="nav-logo-dot"     aria-hidden="true"></span>
+    </a>
+
+    <!-- Breadcrumb de pasos -->
+    <nav class="checkout-breadcrumb" aria-label="Pasos del checkout">
+      <span class="crumb active" id="crumb-1" aria-current="step">
+        <i data-lucide="map-pin" width="14" height="14" aria-hidden="true"></i>
+        Envío
+      </span>
+      <span class="crumb-sep" aria-hidden="true">›</span>
+      <span class="crumb" id="crumb-2">
+        <i data-lucide="credit-card" width="14" height="14" aria-hidden="true"></i>
+        Pago
+      </span>
+      <span class="crumb-sep" aria-hidden="true">›</span>
+      <span class="crumb" id="crumb-3">
+        <i data-lucide="check-circle" width="14" height="14" aria-hidden="true"></i>
+        Confirmación
+      </span>
+    </nav>
+
+    <a href="index.html" class="nav-back-btn" aria-label="Volver a seguir comprando">
+      <i data-lucide="arrow-left" width="15" height="15" aria-hidden="true"></i>
+      <span>Seguir comprando</span>
+    </a>
+  </header>
+
+
+  <!-- ═══════════ CHECKOUT LAYOUT ═════════════════════ -->
+  <main id="checkout-layout" tabindex="-1">
+
+    <!-- ── Columna de formularios ──────────────────── -->
+    <div id="checkout-forms">
+
+      <!-- PASO 1: Dirección de envío -->
+      <section class="checkout-section"
+               id="section-envio"
+               aria-labelledby="heading-envio">
+
+        <div class="section-header">
+          <span class="section-number" aria-hidden="true">1</span>
+          <div>
+            <h2 class="section-title" id="heading-envio">Dirección de envío</h2>
+            <p  class="section-sub">¿A dónde enviamos tu pedido?</p>
+          </div>
+        </div>
+
+        <div class="form-grid" role="group" aria-label="Datos de envío">
+
+          <div class="form-group col-2">
+            <label class="form-label" for="env-nombre">Nombre completo *</label>
+            <input class="form-input" type="text" id="env-nombre"
+                   placeholder="Juan Pérez García"
+                   autocomplete="name"
+                   aria-required="true" aria-invalid="false" />
+            <span class="field-error" id="err-env-nombre" role="alert"></span>
+          </div>
+
+          <div class="form-group col-2">
+            <label class="form-label" for="env-telefono">Teléfono de contacto *</label>
+            <input class="form-input" type="tel" id="env-telefono"
+                   placeholder="55 1234 5678"
+                   autocomplete="tel"
+                   aria-required="true" aria-invalid="false" />
+            <span class="field-error" id="err-env-telefono" role="alert"></span>
+          </div>
+
+          <div class="form-group" style="grid-column: span 1">
+            <label class="form-label" for="env-calle">Calle *</label>
+            <input class="form-input" type="text" id="env-calle"
+                   placeholder="Av. Insurgentes Sur"
+                   autocomplete="address-line1"
+                   aria-required="true" aria-invalid="false" />
+            <span class="field-error" id="err-env-calle" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="env-num-ext">Núm. Ext. *</label>
+            <input class="form-input" type="text" id="env-num-ext"
+                   placeholder="1234"
+                   aria-required="true" aria-invalid="false" />
+            <span class="field-error" id="err-env-num-ext" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="env-num-int">Núm. Int.</label>
+            <input class="form-input" type="text" id="env-num-int"
+                   placeholder="Depto 5A" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="env-colonia">Colonia *</label>
+            <input class="form-input" type="text" id="env-colonia"
+                   placeholder="Del Valle"
+                   autocomplete="address-line2"
+                   aria-required="true" aria-invalid="false" />
+            <span class="field-error" id="err-env-colonia" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="env-cp">Código Postal *</label>
+            <input class="form-input" type="text" id="env-cp"
+                   placeholder="03100" maxlength="5"
+                   autocomplete="postal-code"
+                   inputmode="numeric"
+                   aria-required="true" aria-invalid="false" />
+            <span class="field-error" id="err-env-cp" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="env-ciudad">Ciudad *</label>
+            <input class="form-input" type="text" id="env-ciudad"
+                   placeholder="Ciudad de México"
+                   autocomplete="address-level2"
+                   aria-required="true" aria-invalid="false" />
+            <span class="field-error" id="err-env-ciudad" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="env-estado">Estado *</label>
+            <select class="form-input form-select" id="env-estado"
+                    autocomplete="address-level1"
+                    aria-required="true" aria-invalid="false">
+              <option value="">Seleccionar…</option>
+              <option>Aguascalientes</option><option>Baja California</option>
+              <option>Baja California Sur</option><option>Campeche</option>
+              <option>Chiapas</option><option>Chihuahua</option>
+              <option>Ciudad de México</option><option>Coahuila</option>
+              <option>Colima</option><option>Durango</option>
+              <option>Guanajuato</option><option>Guerrero</option>
+              <option>Hidalgo</option><option>Jalisco</option>
+              <option>Estado de México</option><option>Michoacán</option>
+              <option>Morelos</option><option>Nayarit</option>
+              <option>Nuevo León</option><option>Oaxaca</option>
+              <option>Puebla</option><option>Querétaro</option>
+              <option>Quintana Roo</option><option>San Luis Potosí</option>
+              <option>Sinaloa</option><option>Sonora</option>
+              <option>Tabasco</option><option>Tamaulipas</option>
+              <option>Tlaxcala</option><option>Veracruz</option>
+              <option>Yucatán</option><option>Zacatecas</option>
+            </select>
+            <span class="field-error" id="err-env-estado" role="alert"></span>
+          </div>
+
+          <div class="form-group col-2">
+            <label class="form-label" for="env-referencia">Referencias (opcional)</label>
+            <input class="form-input" type="text" id="env-referencia"
+                   placeholder="Entre calles, color de fachada, etc." />
+          </div>
+
+        </div><!-- /form-grid -->
+
+        <!-- Checkbox de factura CFDI -->
+        <div class="cfdi-toggle">
+          <label class="toggle-row" for="check-cfdi">
+            <div class="custom-checkbox">
+              <input type="checkbox"
+                     id="check-cfdi"
+                     onchange="toggleCFDI()"
+                     aria-expanded="false"
+                     aria-controls="cfdi-panel" />
+              <span class="checkmark" aria-hidden="true"></span>
+            </div>
+            <div>
+              <span class="toggle-label">Requiero factura (CFDI 4.0)</span>
+              <span class="toggle-sub">Datos fiscales para el SAT</span>
+            </div>
+            <span class="sat-badge" aria-label="Conforme al SAT México">SAT</span>
+          </label>
+        </div>
+
+        <!-- Panel CFDI (colapsable) -->
+        <div id="cfdi-panel"
+             class="cfdi-panel"
+             role="region"
+             aria-label="Datos de facturación CFDI"
+             aria-hidden="true">
+
+          <div class="cfdi-panel-header">
+            <i data-lucide="file-text" width="16" height="16" aria-hidden="true"></i>
+            Datos de Facturación
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="cfdi-rfc">RFC *</label>
+              <input class="form-input" type="text" id="cfdi-rfc"
+                     placeholder="XAXX010101000" maxlength="13"
+                     style="text-transform:uppercase"
+                     aria-required="true" aria-invalid="false" />
+              <span class="field-error" id="err-cfdi-rfc" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cfdi-cp">C.P. Fiscal *</label>
+              <input class="form-input" type="text" id="cfdi-cp"
+                     placeholder="03100" maxlength="5" inputmode="numeric"
+                     aria-required="true" aria-invalid="false" />
+              <span class="field-error" id="err-cfdi-cp" role="alert"></span>
+            </div>
+
+            <div class="form-group col-2">
+              <label class="form-label" for="cfdi-razon">Razón Social *</label>
+              <input class="form-input" type="text" id="cfdi-razon"
+                     placeholder="Nombre fiscal ante el SAT"
+                     aria-required="true" aria-invalid="false" />
+              <span class="field-error" id="err-cfdi-razon" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cfdi-regimen">Régimen Fiscal *</label>
+              <select class="form-input form-select" id="cfdi-regimen"
+                      aria-required="true" aria-invalid="false">
+                <option value="">Seleccionar…</option>
+                <option value="601">601 - General de Ley Personas Morales</option>
+                <option value="603">603 - Personas Morales sin Fines Lucrativos</option>
+                <option value="605">605 - Sueldos y Salarios</option>
+                <option value="606">606 - Arrendamiento</option>
+                <option value="612">612 - Actividades Empresariales (Persona Física)</option>
+                <option value="616">616 - Sin Obligaciones Fiscales</option>
+                <option value="621">621 - Incorporación Fiscal</option>
+                <option value="626">626 - Régimen Simplificado de Confianza</option>
+              </select>
+              <span class="field-error" id="err-cfdi-regimen" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cfdi-uso">Uso del CFDI *</label>
+              <select class="form-input form-select" id="cfdi-uso"
+                      aria-required="true" aria-invalid="false">
+                <option value="">Seleccionar…</option>
+                <option value="G01">G01 - Adquisición de mercancías</option>
+                <option value="G03">G03 - Gastos en general</option>
+                <option value="I04">I04 - Equipo de cómputo y accesorios</option>
+                <option value="D01">D01 - Honorarios médicos y dentales</option>
+                <option value="S01">S01 - Sin efectos fiscales</option>
+              </select>
+              <span class="field-error" id="err-cfdi-uso" role="alert"></span>
+            </div>
+          </div>
+        </div><!-- /cfdi-panel -->
+
+        <div class="section-actions">
+          <button class="btn-section-next"
+                  id="btn-go-payment"
+                  onclick="goToPayment()"
+                  aria-label="Guardar dirección y continuar al pago">
+            Continuar al pago
+            <i data-lucide="arrow-right" width="16" height="16" aria-hidden="true"></i>
+          </button>
+        </div>
+
+      </section><!-- /section-envio -->
+
+
+      <!-- PASO 2: Método de pago -->
+      <section class="checkout-section locked"
+               id="section-pago"
+               aria-labelledby="heading-pago"
+               aria-disabled="true">
+
+        <div class="section-header">
+          <span class="section-number" aria-hidden="true">2</span>
+          <div>
+            <h2 class="section-title" id="heading-pago">Método de pago</h2>
+            <p  class="section-sub">Pago 100% seguro. No guardamos tus datos bancarios.</p>
+          </div>
+          <div class="security-badge" aria-label="Conexión segura SSL">
+            <i data-lucide="shield-check" width="14" height="14" aria-hidden="true"></i>
+            SSL
+          </div>
+        </div>
+
+        <!-- Selector de método de pago (role=radiogroup) -->
+        <div class="payment-methods"
+             role="radiogroup"
+             aria-label="Selecciona tu método de pago"
+             id="payment-methods">
+
+          <label class="payment-option" id="opt-stripe">
+            <input type="radio"
+                   name="metodo_pago"
+                   value="stripe"
+                   aria-label="Pagar con tarjeta de crédito o débito vía Stripe"
+                   onchange="selectPaymentMethod('stripe')" />
+            <div class="payment-option-inner">
+              <span class="payment-radio-dot" aria-hidden="true"></span>
+              <div class="payment-logo stripe-logo">
+                <i data-lucide="credit-card" width="20" height="20" aria-hidden="true"></i>
+                <span>Tarjeta de crédito / débito</span>
+              </div>
+              <span class="payment-brands">Visa · Mastercard · Amex</span>
+            </div>
+          </label>
+
+          <label class="payment-option" id="opt-paypal">
+            <input type="radio"
+                   name="metodo_pago"
+                   value="paypal"
+                   aria-label="Pagar con PayPal"
+                   onchange="selectPaymentMethod('paypal')" />
+            <div class="payment-option-inner">
+              <span class="payment-radio-dot" aria-hidden="true"></span>
+              <div class="payment-logo paypal-logo">
+                <i data-lucide="wallet" width="20" height="20" aria-hidden="true"></i>
+                <span>PayPal</span>
+              </div>
+              <span class="payment-brands">Saldo PayPal · Tarjeta vinculada</span>
+            </div>
+          </label>
+
+        </div><!-- /payment-methods -->
+
+        <!-- Panel Stripe -->
+        <div class="payment-panel"
+             id="panel-stripe"
+             role="region"
+             aria-label="Formulario de pago con tarjeta">
+
+          <div class="stripe-notice" role="note">
+            <i data-lucide="info" width="14" height="14" aria-hidden="true"></i>
+            Ingresa los datos de tu tarjeta. Tu información está cifrada con SSL.
+          </div>
+
+          <!--
+            En producción, Stripe Elements monta aquí su iframe.
+            stripe.elements().create('card').mount('#stripe-card-element')
+          -->
+          <div id="stripe-card-element"
+               class="stripe-element-mock"
+               aria-label="Campos de tarjeta (simulación — usar Stripe Elements en producción)">
+            <div class="mock-card-row">
+              <div class="mock-field wide">
+                <div class="mock-label">Número de tarjeta</div>
+                <div class="mock-input">
+                  <i data-lucide="credit-card" width="14" height="14" aria-hidden="true"></i>
+                  •••• •••• •••• ••••
+                </div>
+              </div>
+            </div>
+            <div class="mock-card-row">
+              <div class="mock-field">
+                <div class="mock-label">Vencimiento</div>
+                <div class="mock-input">MM / AA</div>
+              </div>
+              <div class="mock-field">
+                <div class="mock-label">CVC</div>
+                <div class="mock-input">•••</div>
+              </div>
+              <div class="mock-field wide">
+                <div class="mock-label">Titular</div>
+                <div class="mock-input">Nombre en la tarjeta</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="payment-error"
+             id="stripe-errors"
+             role="alert"
+             aria-live="assertive"></p>
+
+          <div class="section-actions" id="stripe-action" style="display:none">
+            <button class="btn-pay-now"
+                    id="btn-pay-stripe"
+                    onclick="submitStripe()"
+                    aria-label="Confirmar y pagar con tarjeta">
+              <i data-lucide="lock" width="16" height="16" aria-hidden="true"></i>
+              <span id="btn-pay-label">Pagar ahora</span>
+            </button>
+          </div>
+        </div><!-- /panel-stripe -->
+
+        <!-- Panel PayPal -->
+        <div class="payment-panel"
+             id="panel-paypal"
+             role="region"
+             aria-label="Pago con PayPal">
+
+          <div class="paypal-notice" role="note">
+            <i data-lucide="info" width="14" height="14" aria-hidden="true"></i>
+            Al confirmar, serás redirigido a PayPal para completar tu pago de forma segura.
+          </div>
+
+          <!--
+            En producción, el SDK de PayPal renderiza aquí los botones:
+            paypal.Buttons({...}).render('#paypal-button-container')
+          -->
+          <div id="paypal-button-container">
+            <button class="btn-paypal-mock"
+                    onclick="submitPayPal()"
+                    aria-label="Pagar con PayPal">
+              <i data-lucide="wallet" width="18" height="18" aria-hidden="true"></i>
+              Pagar con PayPal
+            </button>
+          </div>
+        </div><!-- /panel-paypal -->
+
+      </section><!-- /section-pago -->
+
+    </div><!-- /checkout-forms -->
+
+
+    <!-- ── Resumen del pedido (columna derecha) ──────── -->
+    <aside id="order-summary" aria-label="Resumen de tu pedido">
+
+      <div class="summary-header">
+        <span class="summary-title">Resumen del pedido</span>
+        <a href="index.html" class="summary-edit-link" aria-label="Editar carrito">
+          <i data-lucide="edit-2" width="13" height="13" aria-hidden="true"></i>
+          Editar
+        </a>
+      </div>
+
+      <!-- Ítems (renderizados por checkout.js) -->
+      <div id="summary-items" role="list" aria-label="Productos en tu pedido"></div>
+
+      <!-- Totales -->
+      <div class="summary-totals">
+        <div class="total-row">
+          <span>Subtotal (sin IVA)</span>
+          <span id="sum-subtotal">$0.00</span>
+        </div>
+        <div class="total-row">
+          <span>IVA (16%)</span>
+          <span id="sum-iva">$0.00</span>
+        </div>
+        <div class="total-row">
+          <span>Envío</span>
+          <span id="sum-envio">$0.00</span>
+        </div>
+        <div class="total-row grand">
+          <span>Total</span>
+          <span id="sum-total">$0.00</span>
+        </div>
+      </div>
+
+      <div class="shipping-badge" id="shipping-badge" aria-live="polite"></div>
+
+      <!-- Notas del pedido -->
+      <div class="notes-section">
+        <label class="form-label" for="notas-cliente"
+               style="margin-bottom:6px;display:block">
+          Notas adicionales (opcional)
+        </label>
+        <textarea id="notas-cliente"
+                  class="notes-textarea"
+                  placeholder="Instrucciones de entrega, horario preferido…"
+                  rows="3"
+                  aria-label="Notas adicionales para el pedido"></textarea>
+      </div>
+
+      <!-- Sellos de confianza -->
+      <div class="trust-badges" aria-label="Garantías de compra">
+        <div class="trust-badge">
+          <i data-lucide="shield-check" width="16" height="16" aria-hidden="true"></i>
+          Pago seguro SSL
+        </div>
+        <div class="trust-badge">
+          <i data-lucide="refresh-ccw" width="16" height="16" aria-hidden="true"></i>
+          Devolución 30 días
+        </div>
+        <div class="trust-badge">
+          <i data-lucide="package" width="16" height="16" aria-hidden="true"></i>
+          Envío asegurado
+        </div>
+      </div>
+
+    </aside><!-- /order-summary -->
+
+  </main><!-- /checkout-layout -->
+
+
+  <!-- ═══════════ MODAL: Pedido confirmado ═════════════ -->
+  <div id="modal-success"
+       class="modal-overlay"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="success-title"
+       aria-hidden="true">
+    <div class="modal-box success-box">
+
+      <div class="success-icon" aria-hidden="true">
+        <i data-lucide="check-circle" width="56" height="56"></i>
+      </div>
+
+      <h2 class="success-title" id="success-title" tabindex="-1">
+        ¡Pago confirmado!
+      </h2>
+      <p class="success-sub">Tu pedido ha sido procesado exitosamente.</p>
+
+      <div class="success-order-num">
+        Pedido # <strong id="success-order-id">—</strong>
+      </div>
+
+      <div class="success-details" id="success-details" aria-live="polite"></div>
+
+      <div class="success-cfdi-msg" id="success-cfdi-msg"
+           style="display:none" aria-live="polite">
+        <i data-lucide="file-text" width="14" height="14" aria-hidden="true"></i>
+        Tu factura CFDI será enviada a tu correo en un plazo de 24 horas hábiles.
+      </div>
+
+      <div class="success-actions">
+        <a href="index.html" class="btn-success-home"
+           aria-label="Volver al catálogo">
+          <i data-lucide="home" width="16" height="16" aria-hidden="true"></i>
+          Volver al catálogo
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Toast container -->
+  <div id="toast-container"
+       role="region"
+       aria-live="polite"
+       aria-label="Notificaciones"></div>
+
+
+  <!-- Footer mínimo -->
+  <footer role="contentinfo" style="border-top:1px solid var(--border-subtle);padding:20px;text-align:center;font-size:0.75rem;color:var(--text-muted)">
+    &copy; 2025 <span style="font-family:var(--font-logo);background:var(--grad-cyan);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">FPS FACTORY</span>
+    · Todos los derechos reservados
+  </footer>
+
+  <!-- NO es module: usa el mismo patrón IIFE del archivo -->
+  <script src="js/checkout.js"></script>
+
+</body>
+</html>
